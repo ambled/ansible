@@ -2,8 +2,7 @@
   service: name=mongodb state=running enabled=yes
 
 - name: add license file
-  shell: curl -s https://s3-eu-west-1.amazonaws.com/varnish-software-saas-terraform/license/license.vac -o /var/opt/vac/license.vac
-  file: path=/var/opt/vac/license.vac mode=0644 owner=vac group=vac
+  shell: "/bin/sh -c \"curl -s https://s3-eu-west-1.amazonaws.com/varnish-software-saas-terraform/license/license.vac -o /var/opt/vac/license.vac && chmod 0644 /var/opt/vac/license.vac && chown vac:vac /var/opt/vac/license.vac\""
   notify:
     - ensure vac is restarted
 
