@@ -1,5 +1,5 @@
 - name: apply varnish configuration
-  template: src=varnish.j2 dest=/etc/default/varnish/varnish
+  template: src=varnish.j2 dest=/etc/default/varnish
   notify:
     - ensure varnish is restarted
 
