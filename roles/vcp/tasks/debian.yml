@@ -12,3 +12,12 @@
   template: src=vstatdprobe.params.j2 dest=/etc/default/vstatdprobe
   notify:
     - ensure vstatdprobe is restarted
+
+- name: ensure varnish is running
+  service: name=varnish state=running enabled=yes
+
+- name: ensure varnish-agent is running
+  service: name=varnish-agent state=running enabled=yes
+
+- name: ensure vstatdprobe is running
+  service: name=vstatdprobe state=running enabled=yes
