@@ -15,4 +15,4 @@
 #     -g                           # Output debug information
 #     -V                           # Output version information
 
-DAEMON_OPTS="-d {{ vcs_server }}"
+DAEMON_OPTS="-p {{ vcsprobe_remote_host_port }} -m {{ vcsprobe_max_queue }} -d {{ vcs_server }}"

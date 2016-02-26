@@ -6,8 +6,5 @@
   notify:
     - ensure vac is restarted
 
-- name: ensure vstatd is running
-  service: name=vstatd state=running enabled=yes
-
 - name: ensure vac is running
   service: name=vac state=running enabled=yes
