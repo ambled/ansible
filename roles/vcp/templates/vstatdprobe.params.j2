@@ -1,0 +1,18 @@
+# Default vcsprobe sysconfig file.
+#
+# The systemd service expects the variable $DAEMON_OPTS to be set from
+# this shell script fragment.
+#
+# Usage: vstatdprobe [-h] [-k log-key-prefix] [-p zmq_port] [-P file] [-d] [-F] [-g] host
+#     -h                           # Show help
+#     -n varnish_name              # Varnishd instance name. Defaults to hostname.
+#     -k log-key-prefix            # Prefix for matching varnishlog key definitions [vcs-key]
+#     -p zmq_port                  # Remote host port [5558]
+#     -m max_queue                 # Maximum number of queued messages [50000]
+#     -P file                      # Pid file []
+#     -d                           # Generate default URL, HOST, and ALL keys
+#     -F                           # Run in foreground
+#     -g                           # Output debug information
+#     -V                           # Output version information
+
+DAEMON_OPTS="-d {{ vcs_server }}"

@@ -1,0 +1,11 @@
+- name: ensure mongodb is running
+  service: name=mongod state=running enabled=yes
+
+- name: add license file
+  shell: curl -s https://s3-eu-west-1.amazonaws.com/varnish-software-saas-terraform/license/license.vac -o /var/opt/vac/license.vac
+  file: path=/var/opt/vac/license.vac mode=0644 owner=vac group=vac
+  notify:
+    - ensure vac is restarted
+
+- name: ensure vstatd is running
+  service: name=vstatd state=running enabled=yes

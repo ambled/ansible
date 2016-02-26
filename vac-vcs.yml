@@ -1,0 +1,5 @@
+- name: apply vac-vcs configuration
+  hosts: localhost
+  remote_user: root
+  roles:
+    - vac-vcs

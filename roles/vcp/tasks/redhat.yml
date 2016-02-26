@@ -1,0 +1,14 @@
+- name: apply varnish configuration
+  template: src=varnish.params.j2 dest=/etc/varnish/varnish.params
+  notify:
+    - ensure varnish is restarted
+
+- name: apply varnish-agent configuration
+  template: src=varnish-agent.params.j2 dest=/etc/varnish/varnish-agent.params
+  notify:
+    - ensure varnish-agent is restarted
+
+- name: apply vstatdprobe configuration
+  template: src=vstatdprobe.params.j2 dest=/etc/varnish/vstatdprobe.params
+  notify:
+    - ensure vstatdprobe is restarted

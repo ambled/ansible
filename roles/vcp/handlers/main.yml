@@ -1,0 +1,8 @@
+- name: "ensure varnish is restarted"
+  service: name="varnish" state=restarted
+
+- name: "ensure varnish-agent is restarted"
+  service: name="varnish-agent" state=restarted
+
+- name: "ensure vstatdprobe is restarted"
+  service: name="vstatdprobe" state=restarted
