@@ -1,2 +1,3 @@
-- include: vac-vcs.yml
+- include: vac.yml
+- include: vcs.yml
 - include: vcp.yml
