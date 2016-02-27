@@ -1,6 +1,5 @@
-vcs_listen_address: ''
+vcs_listen_address: '0.0.0.0'
 vcs_listen_port: 6555
 vcs_bucket_length: 10
 vcs_num_buckets: 15
-vcs_table_size: 20000
 vcs_zmq_list_port: 5558
