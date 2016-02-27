@@ -1,0 +1,170 @@
+#  -*-shell-script-*-
+
+# Common definitions for install and init file for the Varnish
+# Administration Console. If you are going to edit this file it is
+# best to do so _before_ installing the VAC.
+#
+
+##### {{ ansible_managed }} #####
+
+# Varnish Software, 2014, 3.x.x Stavkroa
+
+# vac directories
+vacDir="/opt/vac"                   # This is where every static asset lives
+vacVarDir="/var/opt/vac"            # And this is where we place variable data according to FHS
+vacEphDir="$vacVarDir"              # This is the default place where compressed ephemeral data lives
+vacDataDir="$vacVarDir/data"        # This is where rrd and parsed ephemeral data will live
+vacTmpDir="$vacVarDir/tmp"          # This is where tmp folder for the vac will live. This is not used by default unless specified below in DAEMON_OPTIONS
+vacLibDir="$vacDir/lib"
+vacNativeLibDir="$vacDir/native"
+vacConfigDir="$vacDir/etc"
+
+# vac configurations
+vacListeningPort={{ vac_bind_port }}           # listening port
+vacListeningHost="{{ vac_bind_host }}"         # listening host
+mongoHost="{{ vac_mongodb_host }}"             # mongo endpoint, host
+mongoPort={{ vac_mongodb_port }}               # mongo endpoint, port
+mongoDB="vcc"                                  # db name
+max_files="{{ vac_max_files }}"                # ulimit
+max_heap_size={{ vac_max_heap_size }}          # jvm max heap size
+initial_heap_size={{ vac_initial_heap_size }}  # jvm initial heap size
+
+# JDI Purger configurables
+# jdi_corepool_size refers to the minimal client threads created at startup time
+# jdi_maxpool_size refers the maximum client threads cap
+jdi_listening_host="0.0.0.0"
+jdi_listening_port=8088
+jdi_client_timeout=5000
+jdi_cache_timeout=3000
+jdi_corepool_size=1000
+jdi_maxpool_size=3000
+jdi_thread_keepalive=5
+jdi_retries=3
+jdi_db_cache_ttl=600000             # 10min ttl for each obj in our db cache
+
+# agent pooling configurables
+vcp_max_active_obj=2                # maximum active objs in pool
+vcp_max_idle_obj=2                  # maximum idle objs in pool
+vcp_min_idle_obj=1                  # mininum idle objs in pool
+vcp_exhausted_action=0              # actions to take when exhausted. 0 = fail, 1 = block, 2 = grow
+vcp_test_on_borrow=true             # perform connection test on borrowing obj from pool
+vcp_test_on_return=false            # perform connection test on returning obj to pool
+vcp_max_wait_on_borrow=200          # max wait time on borrow object in ms
+vcp_prepare_pool_immediately=true   # prepare pools on startup
+vcp_http_keep_connection_alive=true # keep connection to agent alive
+vcp_http_between_bytes_timeout=5000 # between bytes timeout on receiving response from varnish-agent
+vcp_http_connect_timeout=5000       # connection timeout to the varnish-agent
+
+# rrd configurables
+# This is the rrd counter definition file
+vacRrdCounters="$vacConfigDir/rrd_conf.xml"
+vacRrdSampleOffset=1                # sampling offset for end time when fetching based on resolution
+
+# group consistency config
+consistency_vcl="true"
+consistency_param="true"
+consistency_log_to_msg="true"
+
+# API logging config
+api_log=true
+api_log_methods="PUT:POST:PATCH:DELETE"
+api_log_uris="/register:/passwordreset:/license:/deploy"
+
+# message clean up job
+msg_to_keep_in_weeks=2
+
+# Any additional Java argument needed can go here
+# for example, you could specify -Djava.io.tmpdir=$vacTmpDir below to override the default tmp folder.
+DAEMON_OPTIONS=""
+
+# VAC Script related configs
+scriptFile="install"                # the absolute, dereferenced path of this script file
+scriptDir=$(dirname "$0")
+serviceName="vac"                   # service name
+serviceUser="vac"                   # OS user name for the service
+serviceGroup="vac"                  # OS group name for the service
+
+# Timeouts for the init file:
+maxShutdownTime=20                  # maximum number of seconds to wait for the daemon to terminate normally
+maxStartupTime=60                   # maximum number of seconds to wait for the daemon to start properly
+
+# vac internal directory structures
+applDir="$vacDir"
+serviceUserHome="$applDir"          # location of vac dir
+serviceLogDir="$vacVarDir/log"
+vacLogDir="$serviceLogDir"
+pidFile="$vacVarDir/$serviceName.pid"
+
+# log files for StdOut/StdErr from JVM.
+jvmLogEnabled=false
+serviceStdOutLog="$serviceLogDir/$serviceName-stdout.log"
+serviceStdErrLog="$serviceLogDir/$serviceName-stderr.log"
+vacShareDir="$vacDir/share"
+vacJarFile="$vacShareDir/vac.jar"   # location of vac.jar file
+
+# VAC configuration, logging and license files
+vacDefinitions="$vacDir/etc/defaults"
+vacLoggingPropFile="$vacDir/etc/log4j.xml"
+licenseFile="$vacVarDir/license.vac"
+initSrc="init-script"
+etcInitDFile="/etc/init.d/$serviceName"
+
+# Detect system architecture
+if [ `uname -m` = "x86_64" ]; then
+    VAC_ARCH="x86_64"
+else
+    echo "'uname -m' returned `uname -m`. Assuming x86."
+    VAC_ARCH="x86"
+fi
+
+# Detect the Java runtime
+
+if [ "$VAC_JAVA_HOME" = "" ] ; then
+    VAC_JAVA_HOME="$JAVA_HOME"
+fi
+
+_JAVA_EXEC="java"
+if [ "$VAC_JAVA_HOME" != "" ] ; then
+    _TMP="$VAC_JAVA_HOME/bin/java"
+    if [ -f "$_TMP" ] ; then
+        if [ -x "$_TMP" ] ; then
+            _JAVA_EXEC="$_TMP"
+        else
+            echo "Warning: $_TMP is not executable"
+        fi
+    else
+        echo "Warning: $_TMP does not exist"
+    fi
+fi
+
+if ! which "$_JAVA_EXEC" >/dev/null ; then
+    echo "Error: No java environment found"
+    exit 1
+fi
+
+#vacClassPath="$vacLibDir/jdi-purger.jar:$vacLibDir/jetty-all-server:8.1.2.v20120308.jar:$vacLibDir/servlet-api-3.0.jar:$vacLibDir/jetty-setuid-java-8.1.2.v20120308.jar:$vacJarFile"
+vacClassPath="$vacLibDir/*:$vacJarFile"
+javaCommand="$_JAVA_EXEC"
+
+JDI_OPTIONS="-Dcom.varnish.jdi.listeninghost=$jdi_listening_host -Dcom.varnish.jdi.listeningport=$jdi_listening_port -Dcom.varnish.jdi.clienttimeout=$jdi_client_timeout -Dcom.varnish.jdi.cachetimeout=$jdi_cache_timeout  -Dcom.varnisih.jdi.thread.corepoolsize=$jdi_corepool_size -Dcom.varnish.jdi.thread.maxpoolsize=$jdi_maxpool_size -Dcom.varnish.jdi.thread.keepalive=$jdi_thread_keepalive -Dcom.varnish.jdi.retries=$jdi_retries -Dcom.varnish.jdi.cacheobj.ttl=$jdi_db_cache_ttl"
+
+VCP_OPTIONS="-Dcom.varnish.vcp.vcp_max_active_obj=$vcp_max_active_obj -Dcom.varnish.vcp.vcp_max_idle_obj=$vcp_max_idle_obj -Dcom.varnish.vcp.vcp_min_idle_obj=$vcp_min_idle_obj -Dcom.varnish.vcp.vcp_exhausted_action=$vcp_exhausted_action -Dcom.varnish.vcp.vcp_test_on_borrow=$vcp_test_on_borrow -Dcom.varnish.vcp.vcp_test_on_return=$vcp_test_on_return -Dcom.varnish.vcp.vcp_max_wait_on_borrow=$vcp_max_wait_on_borrow -Dcom.varnish.vcp.vcp_prepare_pool_immediately=$vcp_prepare_pool_immediately -Dcom.varnish.vcp.vcp_http_keep_connection_alive=$vcp_http_keep_connection_alive -Dcom.varnish.vcp.vcp_http_between_bytes_timeout=$vcp_http_between_bytes_timeout -Dcom.varnish.vcp.vcp_http_connect_timeout=$vcp_http_connect_timeout"
+
+CONSISTENCY_OPTION="-Dcom.varnish.jobs.consistency.vcl.rectify=$consistency_vcl -Dcom.varnish.jobs.consistency.params.rectify=$consistency_param -Dcom.varnish.jobs.consistency.verbose=$consistency_log_to_msg"
+
+API_LOG_OPTION="-Dcom.varnish.cc.messagelog=$api_log -Dcom.varnish.cc.messagelog.methods=$api_log_methods -Dcom.varnish.cc.messagelog.uris=$api_log_uris"
+
+MSG_TO_KEEP_OPTION="-Dcom.varnish.jobs.msgs_to_keep_in_weeks=$msg_to_keep_in_weeks"
+
+# if PermGen errors starts cropping up, consider using the follow args. it will bump up the permgen size and enable cleaning of that otherwise untouched space.
+# DAEMON_OPTIONS="-XX:MaxPermSize=128m -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled"
+
+# uncomment the following to start VAC with jconsole hook-in
+# DAEMON_OPTIONS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9000 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -agentlib:hprof=heap=dump,file=/tmp/hprof.bin,format=b,depth=10"
+
+# uncomment the following start VAC with debugger hook-in
+# DAEMON_OPTIONS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"
+
+javaArgs="-server -Xms$initial_heap_size -Xmx$max_heap_size -Djava.library.path=$vacNativeLibDir/$VAC_ARCH -Dcom.varnish.rrd.default.sample_offset=$vacRrdSampleOffset -Dcom.varnish.rrd.default.xml=$vacRrdCounters -Dcom.varnish.vac.log.dir=$vacLogDir -Dcom.varnish.vac.emphemeral.dir=$vacEphDir -Dcom.varnish.vac.data.dir=$vacDataDir -Dcom.varnish.vac.user=$serviceUser -Dcom.varnish.vac.group=$serviceGroup -Dcom.varnish.vac.host=$vacListeningHost -Dcom.varnish.vac.port=$vacListeningPort -Dcom.varnish.vac.mongo.port=$mongoPort -Dcom.varnish.vac.mongo.host=$mongoHost -Dcom.varnish.vac.mongo.db=$mongoDB -Dlog4j.configuration=file://${vacLoggingPropFile} -Dorg.terracotta.quartz.skipUpdateCheck=true -Dcom.varnish.license.file=$licenseFile -Dcom.varnish.cc.dir=$vacDir $CONSISTENCY_OPTION $MSG_TO_KEEP_OPTION $DAEMON_OPTIONS $VCP_OPTIONS $JDI_OPTIONS $API_LOG_OPTION -classpath $vacClassPath com.varnish.VacService"
+
+javaCommandLine="$javaCommand $javaArgs"

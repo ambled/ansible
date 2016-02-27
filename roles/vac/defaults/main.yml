@@ -1,0 +1,8 @@
+vac_bind_host: '0.0.0.0'
+vac_bind_port: 80
+vac_mongodb_host: '127.0.0.1'
+vac_mongodb_port: 27017
+vac_max_files: 131072 
+vac_max_heap_size: '2048m'
+vac_initial_heap_size: '512m'
+ansible_managed: 'PROTECTED BY ANSIBLE'

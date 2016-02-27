@@ -1,6 +1,16 @@
 - name: ensure mongodb is running
   service: name=mongod state=running enabled=yes
 
+- name: apply defaults configuration
+  template: src=defaults.j2 dest=/opt/vac/etc/defaults backup=yes
+  notify:
+    - ensure vac is restarted
+
+- name: apply log4j.xml configuration
+  template: src=log4j.xml.j2 dest=/opt/vac/etc/log4j.xml backup=yes
+  notify:
+    - ensure vac is restarted
+
 - name: add license file
   shell: "/bin/sh -c \"curl -s https://s3-eu-west-1.amazonaws.com/varnish-software-saas-terraform/license/license.vac -o /var/opt/vac/license.vac && chmod 0644 /var/opt/vac/license.vac && chown vac:vac /var/opt/vac/license.vac\""
   notify:
