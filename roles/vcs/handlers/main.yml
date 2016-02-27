@@ -1,0 +1,2 @@
+- name: ensure vstatd is restarted
+  service: name="vstatd" state=restarted

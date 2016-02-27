@@ -1,0 +1,21 @@
+# Default varnish-custom-statistics sysconfig file.
+#
+# The systemd service expects the variable $DAEMON_OPTS to be set from
+# this shell script fragment.
+#
+#Usage: varnish-custom-statistics  [-h] [-m period_len] [-b bucket_len] [-a port] [-s tbl_len] [-z port] [-l acl] [-e file] [-P file] [-F] [-g]
+#    -h                           # Show help
+#    -a [IP:]port                 # HTTP listen IP and port [6555]
+#    -b seconds                   # Bucket length [30]
+#    -m num_buckets               # Duration of tracked period [15]
+#    -s tbl_len                   # Hash table size [20000]
+#    -z port                      # ZMQ listen port [5558]
+#    -l acl                       # Access control list for HTTP interface []
+#    -e file                      # Error log file for mongoose httpd []
+#    -P file                      # Pid file []
+#    -u dir                       # Root directory for vcs ui files [/opt/varnish-custom-statistics/share/html]
+#    -F                           # Run in foreground
+#    -g                           # Output debug information
+
+
+DAEMON_OPTS="-a {{ vcs_listen_address }}:{{ vcs_listen_port }} -b {{ vcs_bucket_length }} -m {{ vcs_num_buckets }} -s {{ vcs_table_size }} -z {{ vcs_zmq_list_port }}"

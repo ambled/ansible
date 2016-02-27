@@ -1,0 +1,7 @@
+- name: apply vstatd configuration
+  template: src=vstatd.params.j2 dst=/etc/varnish/vstatd.params
+  notify:
+    - ensure vstatd is restarted
+
+- name: ensure vstatd is running
+  service: name=vstatd state=running enabled=yes
