@@ -1,5 +1,5 @@
 - name: apply vcp configuration
-  hosts: localhost
+  hosts: all
   remote_user: root
   roles:
     - vcp
