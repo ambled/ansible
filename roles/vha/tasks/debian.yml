@@ -22,7 +22,7 @@
   template: src=nodes.conf.j2 dest={{ vha_nodes_conf }}
   when: vha_agent_dir.stat.exists == True
 
-- stat: path={{ vha_node_conf }}
+- stat: path={{ vha_nodes_conf }}
   register: vha_node_conf_file
 
 - name: create vha.vcl
