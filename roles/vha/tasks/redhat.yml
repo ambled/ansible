@@ -21,6 +21,8 @@
 - name: create vha-agent nodes.conf
   template: src=nodes.conf.j2 dest={{ vha_nodes_conf }}
   when: vha_agent_dir.stat.exists == True
+  notify:
+    - ensure vha-agent is restarted
 
 - stat: path={{ vha_nodes_conf }}
   register: vha_node_conf_file
@@ -28,6 +30,8 @@
 - name: create vha.vcl
   shell: "vha-agent -N {{ vha_nodes_conf }} -g > {{ vha_vcl }}"
   when: vha_node_conf_file.stat.exists == True
+  notify:
+    - ensure vha-agent is restarted
 
 - stat: path={{ vha_vcl }}
   register: vha_vcl_file
@@ -35,3 +39,5 @@
 - name: ensure vha.vcl is included to default.vcl
   template: src=default.vcl.j2 dest={{ varnish_default_vcl }}
   when: vha_vcl_file.stat.exists == True
+  notify:
+    - ensure varnish is restarted
