@@ -1,5 +1,0 @@
-- name: ensure varnish is restarted
-  service: name=varnish state=restarted
-
-- name: ensure vha-agent is restarted
-  service: name=vha-agent state=restarted

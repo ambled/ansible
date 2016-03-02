@@ -1,4 +1,10 @@
-- include: redhat.yml
+- name: ensure varnish is restarted
+  service: name=varnish state=restarted
+
+- name: ensure vha-agent is restarted on redhat
+  service: name=vha-agent state=restarted
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
-- include: debian.yml
+
+- name: ensure vha-agent is restarted on debian
+  service: name=varnish-plus-ha state=restarted
   when: ansible_os_family == 'Debian'
