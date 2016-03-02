@@ -1,0 +1,15 @@
+# Configuration file for Varnish High Availability Agent.
+#
+# The systemd service expects the variable $DAEMON_OPTS to be set from
+# this shell script fragment.
+#
+# See vha-agent(1) for an overview of valid settings.
+
+# Edit DAEMON_OPTS below and set ENABLE=1 to finalize configuration.
+ENABLE={{ vha_enable }}
+
+# Create a file /etc/vha-agent/nodes.conf (or change the line below) and fill
+# it with your nodes, one per line with the format "name = addr"
+# You also need to change "node" to the name of this machine.
+# please consult the man page for more info
+DAEMON_OPTS="-N {{ vha_nodes_conf }} -m {{ vha_self_ipv4_address }} -s {{ vha_status_file }}"

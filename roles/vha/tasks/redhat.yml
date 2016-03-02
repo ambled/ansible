@@ -1,0 +1,24 @@
+- name: apply vha nodes configuration
+  template: src=vha-agent.params.j2 dest=/etc/varnish/vha-agent.params
+
+# - name: create a full list of registered cache nodes
+#   shell: "/bin/sh -c \"for i in \$(curl -s -u vac:vac -X GET http://{{ vac_server }}:/api/v1/cache | python -m json.tool | grep agentHost | tr -d '\",' | awk '{print \$2}'); do echo \"node_\$(echo \$i | sed 's/\./_/g') = \$i\"; done > /tmp/nodes.conf\""
+
+- name: canonify self ipv4 address
+  shell: "/bin/sh -c \"echo \"{{ vha_self_ipv4_address }}\" | sed 's/\\./_/g'\""
+  register: canonified_vha_self_ipv4_address
+
+- name: canonify other node ipv4 address
+  shell: "/bin/sh -c \"echo \"{{ vha_other_node }}\" | sed 's/\\./_/g'\""
+  register: canonified_vha_other_node
+
+- name: ensure /etc/vha-agent is presented
+  file: path=/etc/vha-agent state=directory owner=root group=root mode=0755
+
+- name: create vha-agent nodes.conf
+  template: src=nodes.conf.j2 dest={{ vha_nodes_conf }}
+  wait_for: path=/etc/vha-agent state=present
+
+- name: create vha.vcl
+  shell: "vha-agent -N {{ vha_nodes_conf }} -g > /etc/varnish/vha.vcl"
+  wait_for: path={{ vha_nodes_conf }} state=present

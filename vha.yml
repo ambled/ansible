@@ -1,0 +1,5 @@
+- name: apply vha configuration
+  hosts: all
+  remote_user: root
+  roles:
+    - vha
