@@ -1,4 +1,4 @@
-- name: apply vha nodes configuration
+- name: apply default vha nodes configuration
   template: src=vha-agent.params.j2 dest=/etc/varnish/vha-agent.params
 
 # - name: create a full list of registered cache nodes
@@ -15,10 +15,23 @@
 - name: ensure /etc/vha-agent is presented
   file: path=/etc/vha-agent state=directory owner=root group=root mode=0755
 
+- stat: path=/etc/vha-agent
+  register: vha_agent_dir
+
 - name: create vha-agent nodes.conf
   template: src=nodes.conf.j2 dest={{ vha_nodes_conf }}
-  wait_for: path=/etc/vha-agent state=present
+  when: vha_agent_dir.stat.exists == True
+
+- stat: path={{ vha_node_conf }}
+  register: vha_node_conf_file
 
 - name: create vha.vcl
-  shell: "vha-agent -N {{ vha_nodes_conf }} -g > /etc/varnish/vha.vcl"
-  wait_for: path={{ vha_nodes_conf }} state=present
+  shell: "vha-agent -N {{ vha_nodes_conf }} -g > {{ vha_vcl }}"
+  when: vha_node_conf_file.stat.exists == True
+
+- stat: path={{ vha_vcl }}
+  register: vha_vcl_file
+
+- name: ensure vha.vcl is included to default.vcl
+  template: src=default.vcl.j2 dest={{ varnish_default_vcl }}
+  when: vha_vcl_file.stat.exits == True
