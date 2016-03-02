@@ -34,4 +34,4 @@
 
 - name: ensure vha.vcl is included to default.vcl
   template: src=default.vcl.j2 dest={{ varnish_default_vcl }}
-  when: vha_vcl_file.stat.exits == True
+  when: vha_vcl_file.stat.exists == True
