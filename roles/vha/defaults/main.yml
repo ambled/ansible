@@ -1,6 +1,6 @@
 vha_enable: 1
 vha_nodes_conf: '/etc/vha-agent/nodes.conf'
-vha_self_ipv4_address: '{{ ansible_enp0s8.ipv4.address }}'
+vha_self_ipv4_address: '{{ ansible_eth0.ipv4.address }}'
 vha_other_node: '{{ other_vha_node }}'
 vha_status_file: '/var/lib/vha-agent/vha-status'
 vha_vcl: '/etc/varnish/vha.vcl'
