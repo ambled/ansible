@@ -1,2 +1,2 @@
-- include: vcp.yml
 - include: vha.yml
+- include: vcp.yml
