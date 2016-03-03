@@ -1,0 +1,11 @@
+varnish_cache_reload_vcl: 1
+varnish_cache_listen_address: ''
+varnish_cache_listen_port: 80
+varnish_cache_admin_listen_address: 'localhost'
+varnish_cache_admin_listen_port: 6082
+varnish_cache_vcl_conf: '/etc/varnish/default.vcl'
+varnish_cache_secret_file: '/etc/varnish/secret'
+varnish_cache_storage: 'malloc,256m'
+varnish_cache_ttl: 120
+varnish_cache_user: 'varnish'
+varnish_cache_group: 'varnish'

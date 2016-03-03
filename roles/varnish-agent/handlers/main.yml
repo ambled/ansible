@@ -1,0 +1,2 @@
+- name: "ensure varnish-agent is restarted"
+  service: name="varnish-agent" state=restarted

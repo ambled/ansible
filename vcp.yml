@@ -1,5 +1,3 @@
-- name: apply vcp configuration
-  hosts: all
-  remote_user: root
-  roles:
-    - vcp
+- include: varnish-cache.yml
+- include: varnish-agent.yml
+- include: vstatdprobe.yml

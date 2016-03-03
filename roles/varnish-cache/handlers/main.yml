@@ -1,0 +1,2 @@
+- name: "ensure varnish-cache is restarted"
+  service: name="varnish" state=restarted

@@ -1,0 +1,5 @@
+- name: apply vcs vstatdprobe configuration
+  hosts: all
+  remote_user: root
+  roles:
+    - vstatdprobe

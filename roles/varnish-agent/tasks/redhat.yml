@@ -1,0 +1,7 @@
+- name: apply varnish-agent configuration
+  template: src=varnish-agent.params.j2 dest=/etc/varnish/varnish-agent.params
+  notify:
+    - ensure varnish-agent is restarted
+
+- name: ensure varnish-agent is running
+  service: name=varnish-agent state=running enabled=yes

@@ -1,0 +1,2 @@
+vstatdprobe_remote_host_port: 5558
+vstatdprobe_max_queue: 50000

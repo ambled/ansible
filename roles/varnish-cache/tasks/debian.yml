@@ -1,0 +1,7 @@
+- name: apply varnish-cache configuration
+  template: src=varnish.j2 dest=/etc/default/varnish
+  notify:
+    - ensure varnish-cache is restarted
+
+- name: ensure varnish-cache is running
+  service: name=varnish state=running enabled=yes

@@ -1,0 +1,5 @@
+- name: apply varnish-agent configuration
+  hosts: all
+  remote_user: root
+  roles:
+    - varnish-agent

@@ -1,0 +1,7 @@
+- name: apply vstatdprobe configuration
+  template: src=vstatdprobe.params.j2 dest=/etc/default/vstatdprobe
+  notify:
+    - ensure vstatdprobe is restarted
+
+- name: ensure vstatdprobe is running
+  service: name=vstatdprobe state=running enabled=yes

@@ -1,0 +1,6 @@
+- include: redhat.yml
+  tags: vstatdprobe
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'
+- include: debian.yml
+  tags: vstatdprobe
+  when: ansible_os_family == 'Debian'
