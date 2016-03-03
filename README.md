@@ -1,26 +1,30 @@
 # Ansible
 Testing Ansible
 
-Support VAC, VCS, Varnish, Varnish-agent, Vstatdprobe, VHA at the current stage.
+This is a collection of Ansible Playbook for experimenting Varnish Plus Products. It currently supports VAC, VCS, Varnish, Varnish-agent, Vstatdprobe, VHA at the current stage.
 
-The playbook contains these following roles:
- - `vac`
- - `vcs`
- - `varnish-cache`
- - `varnish-agent`
-   - required: `-e vac_server=IP/HOSTNAME`
- - `vstatdprobe`
-   - required: `-e vcs_server=IP/HOSTNAME`
- - `vha`
-   - required: `-e other_vha_node=IP/HOSTNAME`
-
-Here is a list the top YML files to call.
+Here is a list the top YML files to be called.
  - `vac.yml`
+   - roles:
+     - `vac`
  - `vcs.yml`
+   - roles:
+     - `vcs`
  - `varnish-cache.yml`
+   - roles:
+     - `varnish-cache`
  - `varnish-agent.yml`
+   - roles:
+     - `varnish-agent`
+       - required: `-e vac_server=IP/HOSTNAME`
  - `vstatdprobe.yml`
+   - roles:
+     - `vstatdprobe`
+       - required: `-e vcs_server=IP/HOSTNAME`
  - `vha.yml`
+   - roles:
+     - `vha`
+       - required: `-e other_vha_node=IP/HOSTNAME`
 
 There are also a serveral alias YML files to run some roles at once. Just for convenience.
  - `vac-vcs.yml`
