@@ -1,5 +1,7 @@
 - name: apply varnish-cache configuration
   hosts: all
   become_user: root
+  become_method: sudo
+  become: yes
   roles:
     - varnish-cache

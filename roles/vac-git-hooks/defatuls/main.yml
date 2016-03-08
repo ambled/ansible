@@ -1,6 +1,6 @@
 vac_git_hooks_group_id: '521c5a464e2ceea0eb18334c'
 vac_git_hooks_vcl_id: '52849728051e0430abe8de11'
-vac_git_hooks_user_password: 'vac:vac'
+vac_git_hooks_user_passwd: 'vac:vac'
 vac_git_hooks_vac_location: 'http://localhost:80'
 vac_git_hooks_file_name: 'main.vcl'
 vac_git_hooks_based_dir: '/root/vac-git-hooks'

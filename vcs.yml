@@ -1,5 +1,7 @@
 - name: apply vcs configuration
   hosts: localhost
   become_user: root
+  become_method: sudo
+  become: yes
   roles:
     - vcs

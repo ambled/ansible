@@ -1,5 +1,7 @@
 - name: setup vac-git hook up configuration
   hosts: localhost
   become_user: root
+  become_method: sudo
+  become: yes
   roles:
     - vac-git-hooks
