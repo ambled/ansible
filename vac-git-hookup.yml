@@ -1,0 +1,5 @@
+- name: setup vac-git hook up configuration
+  hosts: localhost
+  become_user: root
+  roles:
+    - vac-git-hookup
