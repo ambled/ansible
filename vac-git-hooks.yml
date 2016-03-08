@@ -2,4 +2,4 @@
   hosts: localhost
   become_user: root
   roles:
-    - vac-git-hookup
+    - vac-git-hooks

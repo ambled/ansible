@@ -1,0 +1,7 @@
+- shell: mkdir -p {{ vac_git_hooks_based_dir }}
+
+- name: prepare .vacrc configuration file
+  template: src=vacrc.j2 dest={{ vac_git_hooks_based_dir }}/vacrc
+
+- name: prepare vac_git_hooks.sh script
+  copy: src=vac_git_hooks.sh dest={{ vac_git_hooks_based_dir }}/vac_git_hooks.sh mode=0755
