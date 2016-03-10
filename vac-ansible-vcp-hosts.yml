@@ -1,0 +1,7 @@
+- name: populate registered VCP nodes to Ansible hosts file
+  hosts: localhost
+  become_user: root
+  become_method: sudo
+  become: yes
+  roles:
+    - vac-ansible-vcp-hosts
