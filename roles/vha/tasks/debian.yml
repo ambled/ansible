@@ -15,6 +15,9 @@
 - name: ensure /etc/vha-agent is presented
   file: path=/etc/vha-agent state=directory owner=root group=root mode=0755
 
+- name: ensure /var/lib/vha-agent is presented
+  file: path=/var/lib/vha-agent state=directory owner=varnish group=varnish mode=0755
+  
 - stat: path=/etc/vha-agent
   register: vha_agent_dir
 
