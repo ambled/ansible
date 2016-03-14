@@ -1,6 +1,3 @@
-- name: apply default vha nodes configuration
-  template: src=vha-agent.params.j2 dest=/etc/varnish/vha-agent.params
-
 # - name: create a full list of registered cache nodes
 #   shell: "/bin/sh -c \"for i in \$(curl -s -u vac:vac -X GET http://{{ vac_server }}:/api/v1/cache | python -m json.tool | grep agentHost | tr -d '\",' | awk '{print \$2}'); do echo \"node_\$(echo \$i | sed 's/\./_/g') = \$i\"; done > /tmp/nodes.conf\""
 
@@ -11,6 +8,9 @@
 - name: canonify other node ipv4 address
   shell: "/bin/sh -c \"echo \"{{ vha_other_node }}\" | sed 's/\\./_/g'\""
   register: canonified_vha_other_node
+
+- name: apply default vha nodes configuration
+  template: src=vha-agent.params.j2 dest=/etc/varnish/vha-agent.params
 
 - name: ensure /etc/vha-agent is presented
   file: path=/etc/vha-agent state=directory owner=root group=root mode=0755
