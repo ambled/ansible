@@ -12,4 +12,4 @@ ENABLE={{ vha_enable }}
 # it with your nodes, one per line with the format "name = addr"
 # You also need to change "node" to the name of this machine.
 # please consult the man page for more info
-DAEMON_OPTS="-N {{ vha_nodes_conf }} -m {{ vha_self_ipv4_address }} -s {{ vha_status_file }}"
+DAEMON_OPTS="-N {{ vha_nodes_conf }} -m node_{{ canonified_vha_self_ipv4_address.stdout }} -s {{ vha_status_file }} -S"
