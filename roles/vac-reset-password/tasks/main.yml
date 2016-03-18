@@ -3,11 +3,11 @@
   register: root_oid
 
 - name: Get all info for JSESSIONID
-  shell: "curl -s -X POST http://localhost/api/rest/login -H \"Content-T-www-form-urlencoded\" -d \"username=vac&password=1234\" -i"
+  shell: "curl -s -X POST http://localhost/api/rest/login -H \"Content-T-www-form-urlencoded\" -d \"username=vac&password={{ vac_reset_root_old_passwd }}\" -i"
   register: root_tmp
 
 - name: Extract only JSESSIONID
-  shell: echo {{ root_tmp.stdout_lines }} | grep -Po 'JSESSIONID=[\w.]+'
+  shell: echo {{ root_tmp.stdout }} | grep -Po 'JSESSIONID=[\w.]+'
   register: root_jsessionid
 
 - name: Apply a new password for VAC user
