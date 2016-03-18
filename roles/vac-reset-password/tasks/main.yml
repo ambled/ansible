@@ -7,7 +7,7 @@
   register: root_tmp
 
 - name: Extract only JSESSIONID
-  shell: echo {{ root_tmp.stdout }} | grep -Po 'JSESSIONID=[\w.]+'
+  shell: echo {{ root_tmp.stdout_lines }} | grep -Po 'JSESSIONID=[\w.]+'
   register: root_jsessionid
 
 - name: Apply a new password for VAC user
