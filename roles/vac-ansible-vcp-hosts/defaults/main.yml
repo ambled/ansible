@@ -1,2 +1,3 @@
 # default is vac:vac
-vac_root_credentials: 'vac:vac'
+vac_root_user: 'vac'
+vac_root_passwd: 'vac'
