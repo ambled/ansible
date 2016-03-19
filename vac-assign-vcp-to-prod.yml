@@ -1,0 +1,7 @@
+- name: assign registered VCP to PROD group
+  hosts: localhost
+  become_user: root
+  become_method: sudo
+  become: yes
+  roles:
+    - vac-assign-vcp-to-prod

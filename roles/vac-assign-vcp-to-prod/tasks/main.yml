@@ -1,0 +1,11 @@
+- name: Get PROD group id
+  shell: "/bin/sh -c \"curl -s -u {{ vac_root_user }}:{{ vac_root_passwd }} -X GET http://localhost/api/v1/group | jq '.list[0]._id[]' | tr -d '\\\"'\""
+  register: group_oid
+
+- name: Get all VCP nodes
+  shell: "/bin/sh -c \"curl -s -u {{ vac_root_user }}:{{ vac_root_passwd }} -X GET http://localhost/api/v1/cache | jq '.list[]._id[]' | tr -d '\\\"'\""
+  register: vcp_nodes
+
+- name: Register VCP nodes to PROD
+  shell: curl -s -u {{ vac_root_user }}:{{ vac_root_passwd }} -X PUT http://localhost/api/v1/group/{{ group_oid.stdout }}/include/{{ item }}
+  with_items: "{{ vcp_nodes.stdout_lines }}"
