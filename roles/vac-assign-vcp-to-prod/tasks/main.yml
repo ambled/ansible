@@ -1,13 +1,14 @@
+- name: Check Credentials
+  shell: "curl -s -X POST http://localhost/api/rest/login -H \"Content-T-www-form-urlencoded\" -d \"username={{ vac_root_user }}&password={{ vac_root_passwd }}\""
+  register: check_credentials
+
 - name: Prepare get_groupoid script
   template: src=get_prod_groupoid.sh.j2 dest=/tmp/get_prod_groupoid.sh mode=0755
+  when: check_credentials.stdout != 'Credential failed.'
 
 - name: Get PROD group id
   shell: /bin/sh /tmp/get_prod_groupoid.sh
   register: group_oid
-
-#- name: Get PROD group id
-#  shell: "/bin/sh -c \"curl -s -u {{ vac_root_user }}:{{ vac_root_passwd }} -X GET http://localhost/api/v1/group | jq '.list[0]._id[]' | tr -d '\\\"'\""
-#  register: group_oid
 
 - name: Get all VCP nodes
   shell: "/bin/sh -c \"curl -s -u {{ vac_root_user }}:{{ vac_root_passwd }} -X GET http://localhost/api/v1/cache | jq '.list[]._id[]' | tr -d '\\\"'\""
