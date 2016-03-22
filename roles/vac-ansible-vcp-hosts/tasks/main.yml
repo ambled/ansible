@@ -1,11 +1,6 @@
-- name: Find a version of ansible
-  shell: "/bin/sh -c \"ansible --version | grep ansible | awk '{print \\$2}'\""
-  register: a_version
+- name: call Varnish API to get a list of caches
+  shell: "/bin/sh -c \"curl -s -u {{ vac_root_user }}:{{ vac_root_passwd }} -X GET http://localhost/api/v1/cache | python -m json.tool | grep agentHost | tr -d '\\\",' | awk '{print \\$2}'\""
+  register: vcp_nodes
 
-- include: more_than_v2.0.0.yml
-  tags: vac-ansible-vcp-hosts
-  when: a_version.stdout | version_compare('2.0.0','>=')
-
-- include: less_than_v2.0.0.yml
-  tags: vac-ansible-vcp-hosts
-  when: a_version.stdout | version_compare('2.0.0','<')
+- name: modify /etc/ansible/hosts file
+  template: src=hosts.j2 dest=/etc/ansible/hosts

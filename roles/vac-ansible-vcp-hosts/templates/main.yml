@@ -1,0 +1,4 @@
+[vac_server]
+localhost ansible_connection=local
+[cache_servers]
+{{ vcp_nodes.stdout }}
