@@ -3,7 +3,7 @@
   register: vac_root_passwd
 
 - name: call Varnish API to get a list of caches
-  shell: "/bin/sh -c \"curl -s -u {{ vac_root_user }}:{{ vac_root_passwd.stdout_lines }} -X GET http://localhost/api/v1/cache | python -m json.tool | grep agentHost | tr -d '\\\",' | awk '{print \\$2}'\""
+  shell: "/bin/sh -c \"curl -s -u {{ vac_root_user }}:{{ vac_root_passwd.stdout }} -X GET http://localhost/api/v1/cache | python -m json.tool | grep agentHost | tr -d '\\\",' | awk '{print \\$2}'\""
   register: vcp_nodes
 
 - name: modify /etc/ansible/hosts file
