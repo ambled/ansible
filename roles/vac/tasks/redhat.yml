@@ -18,3 +18,4 @@
 
 - name: ensure vac is running
   service: name=vac state=running enabled=yes
+  ignore_errors: yes
