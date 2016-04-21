@@ -10,4 +10,5 @@
 
 - name: ensure vstatdprobe is running
   service: name=vstatdprobe state=running enabled=yes
+  when: vstatdprobe_conf_file.stat.exists == True
   ignore_errors: yes
