@@ -5,3 +5,4 @@
 
 - name: ensure vstatdprobe is running
   service: name=vstatdprobe state=running enabled=yes
+  ignore_errors: yes
