@@ -5,4 +5,4 @@
 #
 # See varnish-agent(1) for an overview of valid settings.
 
-DAEMON_OPTS="-z http://{{ vac_server }}/api/rest/register"
+DAEMON_OPTS="-K {{ varnish_agent_secret_file }} -z http://{{ vac_server }}/api/rest/register"
