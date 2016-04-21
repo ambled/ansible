@@ -1,4 +1,4 @@
-- name: check varnish-custome-statistics installed or not
+- name: check varnish-custom-statistics installed or not
   stat: path=/etc/default/vstatdprobe
   register: vstatdprobe_conf_file
 
