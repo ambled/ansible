@@ -1,5 +1,10 @@
+- name: check varnish-custome-statistics installed or not
+  stat: path=/etc/default/vstatdprobe
+  register: vstatdprobe_conf_file
+
 - name: apply vstatdprobe configuration
   template: src=vstatdprobe.params.j2 dest=/etc/default/vstatdprobe
+  when: vstatdprobe_conf_file.stat.exists == True
   notify:
     - ensure vstatdprobe is restarted
 
