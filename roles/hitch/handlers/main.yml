@@ -1,0 +1,2 @@
+- name: "ensure hitch is restarted"
+  service: name="hitch" state=restarted

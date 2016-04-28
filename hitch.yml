@@ -1,0 +1,6 @@
+- name: apply hitch configuration
+  hosts: all
+  become_user: root
+  roles:
+    - varnish-cache
+    - hitch

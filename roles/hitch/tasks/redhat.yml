@@ -1,0 +1,21 @@
+- stat: path=/etc/hitch/testcert.pem
+  register: hitch_testcert_pem_file
+
+- name: prepare /etc/hitch/hitch.params
+  template: src=hitch.params.j2 dest=/etc/hitch/hitch.params owner=root group=root mode=0644
+  notify:
+    - ensure hitch is restarted
+
+- name: prepare /etc/hitch/hitch.conf
+  template: src=hitch.conf.j2 dest=/etc/hitch/hitch.conf owner=root group=root mode=0644
+  notify:
+    - ensure hitch is restarted
+
+- name: prepare /etc/hitch/testcert.pem
+  copy: src=testcert.pem dest=/etc/hitch/testcert.pem owner=root group=root mode=0644
+  when: hitch_testcert_pem_file.stat.exists == False
+  notify:
+    - ensure hitch is restarted
+
+- name: ensure hitch is running
+  service: name=hitch state=running enabled=yes

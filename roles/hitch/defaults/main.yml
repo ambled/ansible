@@ -1,0 +1,4 @@
+hitch_conf_file: '/etc/hitch/hitch.conf'
+hitch_testcert_pem: '/etc/hitch/testcert.pem'
+hitch_frontend: '[*]:443'
+hitch_backend: '[127.0.0.1]:80'
