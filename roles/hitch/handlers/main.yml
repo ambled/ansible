@@ -1,2 +1,2 @@
-- name: "ensure hitch is restarted"
-  service: name="hitch" state=restarted
+- name: ensure hitch is restarted
+  service: name=hitch state=restarted
