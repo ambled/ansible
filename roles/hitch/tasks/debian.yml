@@ -1,6 +1,9 @@
 - stat: path=/etc/hitch/testcert.pem
   register: hitch_testcert_pem_file
 
+- name: ensure /var/run/hitch is there
+  file: path=/var/run/hitch state=directory owner=root group=root mode=0755
+
 - name: prepare /etc/default/hitch
   template: src=hitch.params.j2 dest=/etc/default/hitch owner=root group=root mode=0644
   notify:
