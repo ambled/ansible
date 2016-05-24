@@ -1,2 +1,4 @@
-- name: "ensure vstatdprobe is restarted"
-  service: name="vstatdprobe" state=restarted
+#- name: "ensure vstatdprobe is restarted"
+#  service: name="vstatdprobe" state=restarted
+- name: ensure vstatdprobe is restarted
+  shell: /usr/bin/pkill vstatdprobe; sleep 2; service vstatdprobe start

@@ -1,2 +1,4 @@
+#- name: ensure varnish-cache is restarted
+#  service: name=varnish state=restarted
 - name: ensure varnish-cache is restarted
-  service: name=varnish state=restarted
+  shell: /usr/bin/pkill varnishd; sleep 2; service varnish start

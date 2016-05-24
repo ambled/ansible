@@ -1,2 +1,4 @@
+#- name: ensure varnish-agent is restarted
+#  service: name=varnish-agent state=restarted
 - name: ensure varnish-agent is restarted
-  service: name=varnish-agent state=restarted
+  shell: /usr/bin/pkill varnish-agent; sleep 2; service varnish-agent start
